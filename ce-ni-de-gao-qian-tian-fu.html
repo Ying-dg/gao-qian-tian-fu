@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>测你的搞钱天赋</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet" />
+<style>
+button, [role="button"] { min-height: 2.75rem;}
+
+:root {
+--bg: #fdf6e9;
+--bg-soft: #f7ecd4;
+--card: #fffdf7;
+--ink: #22301f;
+--ink-soft: #5c6a57;
+--line: #e6d9bd;
+--green: #0e7a4f;
+--green-deep: #0a5c3c;
+--green-tint: #e3f2e8;
+--gold: #e19a12;
+--gold-soft: #fbeecd;
+--red: #d64533;
+--shadow: 0 18px 40px rgba(90, 66, 10, 0.14);
+--radius: 20px;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--bg: #10160f;
+--bg-soft: #182118;
+--card: #1c261b;
+--ink: #f0ead6;
+--ink-soft: #a9b39e;
+--line: #37452f;
+--green: #3fbf85;
+--green-deep: #2ea56e;
+--green-tint: #1d3325;
+--gold: #f0b93e;
+--gold-soft: #3a2f14;
+--red: #ff7a66;
+--shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+}
+
+* { box-sizing: border-box;}
+html, body { margin: 0; padding: 0;}
+body {
+font-family: "Noto Sans SC", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+background:
+radial-gradient(circle at 12% -4%, var(--gold-soft) 0, transparent 34%),
+radial-gradient(circle at 105% 12%, var(--green-tint) 0, transparent 38%),
+var(--bg);
+color: var(--ink);
+min-height: 100vh;
+-webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+max-width: 600px;
+margin: 0 auto;
+padding: 20px 16px 48px;
+}
+
+/* ---------- 通用 ---------- */
+.screen { display: none;}
+.screen.active { display: block; animation: fadeIn.35s ease both;}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px);}
+to { opacity: 1; transform: translateY(0);}
+}
+@media (prefers-reduced-motion: reduce) {
+.screen.active { animation: none;}
+* { transition: none!important;}
+}
+
+.btn {
+display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+border: none; cursor: pointer; font-family: inherit; font-weight: 700;
+border-radius: 999px; padding: 14px 30px; font-size: 17px;
+transition: transform.15s ease, box-shadow.15s ease, background.15s ease;
+}
+.btn:active { transform: scale(.97);}
+.btn-primary {
+background: var(--green); color: #fff;
+box-shadow: 0 10px 22px rgba(14, 122, 79,.32);
+width: 100%;
+}
+.btn-primary:hover { background: var(--green-deep);}
+.btn-ghost {
+background: transparent; color: var(--ink-soft);
+border: 1.5px solid var(--line); width: 100%;
+}
+.btn-ghost:hover { border-color: var(--green); color: var(--green);}
+
+/* ---------- 首页 ---------- */
+.hero { text-align: center; padding: 26px 6px 8px; position: relative;}
+.coin {
+position: absolute; border-radius: 50%;
+background: radial-gradient(circle at 35% 32%, #ffe9a8, var(--gold) 68%);
+color: #7a5200; font-weight: 900; display: flex; align-items: center; justify-content: center;
+box-shadow: inset 0 0 0 3px rgba(255,255,255,.45), 0 6px 14px rgba(160, 110, 0,.25);
+font-family: "Noto Serif SC", serif;
+}
+.coin.c1 { width: 54px; height: 54px; font-size: 26px; left: 2%; top: 6px; transform: rotate(-12deg);}
+.coin.c2 { width: 38px; height: 38px; font-size: 18px; right: 4%; top: 52px; transform: rotate(14deg);}
+.coin.c3 { width: 30px; height: 30px; font-size: 14px; left: 10%; top: 118px; transform: rotate(8deg); opacity:.85;}
+.hero-tag {
+display: inline-block; background: var(--green-tint); color: var(--green);
+font-size: 13px; font-weight: 700; letter-spacing:.14em;
+padding: 6px 14px; border-radius: 999px; margin-bottom: 18px;
+}
+.hero h1 {
+font-family: "Noto Serif SC", serif; font-weight: 900;
+font-size: clamp(42px, 11vw, 58px); line-height: 1.12; margin: 0 0 14px;
+letter-spacing:.01em;
+}
+.hero h1.hl { color: var(--green); position: relative; white-space: nowrap;}
+.hero h1.hl::after {
+content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 10px;
+background: var(--gold); opacity:.38; border-radius: 4px; z-index: -1;
+}
+.hero p.sub { color: var(--ink-soft); font-size: 16px; line-height: 1.7; margin: 0 auto 8px; max-width: 420px;}
+.hero-meta {
+display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 20px 0 26px;
+}
+.hero-meta span {
+background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+padding: 7px 14px; font-size: 13.5px; font-weight: 500; color: var(--ink-soft);
+}
+.hero-meta b { color: var(--ink);}
+
+.type-preview {
+background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+padding: 20px 18px 8px; box-shadow: var(--shadow); text-align: left; margin-bottom: 26px;
+}
+.type-preview h2 { font-size: 15px; margin: 0 0 4px; color: var(--ink-soft); font-weight: 700; letter-spacing:.06em;}
+.type-row {
+display: flex; align-items: center; gap: 12px;
+padding: 11px 0; border-bottom: 1px dashed var(--line);
+}
+.type-row:last-child { border-bottom: none;}
+.type-badge {
+flex: 0 0 auto; width: 42px; height: 42px; border-radius: 13px;
+display: flex; align-items: center; justify-content: center;
+font-family: "Noto Serif SC", serif; font-weight: 900; font-size: 19px; color: #fff;
+}
+.type-row.t-name { font-weight: 700; font-size: 15.5px;}
+.type-row.t-desc { color: var(--ink-soft); font-size: 13px; margin-top: 1px;}
+.fineprint { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-top: 14px; line-height: 1.6;}
+
+/* ---------- 答题 ---------- */
+.quiz-top { display: flex; align-items: center; gap: 12px; margin: 8px 0 18px;}
+.back-btn {
+flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+border: 1.5px solid var(--line); background: var(--card); color: var(--ink);
+font-size: 19px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+padding: 0;
+}
+.back-btn:disabled { opacity:.3; cursor: default;}
+.progress-track { flex: 1; height: 10px; background: var(--bg-soft); border-radius: 999px; overflow: hidden; border: 1px solid var(--line);}
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--gold)); border-radius: 999px; transition: width.35s ease; width: 0%;}
+.q-count { font-weight: 700; font-size: 14px; color: var(--ink-soft); white-space: nowrap;}
+.q-count b { color: var(--green); font-size: 17px;}
+
+.q-card {
+background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+box-shadow: var(--shadow); padding: 26px 20px 22px;
+}
+.q-scene {
+display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing:.1em;
+color: var(--gold); background: var(--gold-soft); padding: 5px 12px; border-radius: 999px; margin-bottom: 14px;
+}
+.q-text { font-size: 21px; font-weight: 900; line-height: 1.5; margin: 0 0 22px; font-family: "Noto Serif SC", serif;}
+.options { display: flex; flex-direction: column; gap: 11px;}
+.option {
+display: flex; align-items: center; gap: 13px; text-align: left;
+background: var(--bg); border: 1.5px solid var(--line); border-radius: 15px;
+padding: 14px 15px; font-size: 15.5px; font-family: inherit; color: var(--ink);
+cursor: pointer; line-height: 1.55; width: 100%;
+transition: border-color.15s ease, background.15s ease, transform.12s ease;
+}
+.option:hover { border-color: var(--green);}
+.option:active { transform: scale(.985);}
+.option.opt-key {
+flex: 0 0 auto; width: 30px; height: 30px; border-radius: 9px;
+background: var(--bg-soft); border: 1px solid var(--line);
+display: flex; align-items: center; justify-content: center;
+font-weight: 900; font-size: 14px; color: var(--ink-soft);
+}
+.option.picked { border-color: var(--green); background: var(--green-tint);}
+.option.picked.opt-key { background: var(--green); color: #fff; border-color: var(--green);}
+.quiz-hint { text-align: center; color: var(--ink-soft); font-size: 13px; margin-top: 16px;}
+
+/* ---------- 加载 ---------- */
+.loading-box { text-align: center; padding: 90px 20px;}
+.loading-coin {
+width: 84px; height: 84px; margin: 0 auto 26px; border-radius: 50%;
+background: radial-gradient(circle at 35% 32%, #ffe9a8, var(--gold) 68%);
+color: #7a5200; font-weight: 900; font-size: 42px;
+display: flex; align-items: center; justify-content: center;
+font-family: "Noto Serif SC", serif;
+box-shadow: inset 0 0 0 4px rgba(255,255,255,.45), 0 10px 24px rgba(160,110,0,.3);
+animation: flip 1s ease-in-out infinite;
+}
+@keyframes flip { 0%,100% { transform: rotateY(0);} 50% { transform: rotateY(180deg);}}
+@media (prefers-reduced-motion: reduce) {.loading-coin { animation: none;}}
+.loading-box h2 { font-family: "Noto Serif SC", serif; font-size: 24px; margin: 0 0 10px;}
+.loading-box p { color: var(--ink-soft); margin: 0; font-size: 15px;}
+
+/* ---------- 结果 ---------- */
+.result-card {
+background: var(--card); border: 1px solid var(--line); border-radius: 24px;
+box-shadow: var(--shadow); overflow: hidden; margin-bottom: 18px;
+}
+.result-head {
+padding: 30px 22px 24px; text-align: center; color: #fff; position: relative;
+}
+.result-head.r-tag { font-size: 13px; font-weight: 700; letter-spacing:.22em; opacity:.85;}
+.result-head h2 { font-family: "Noto Serif SC", serif; font-size: 36px; font-weight: 900; margin: 10px 0 6px; line-height: 1.2;}
+.result-head.r-sub { font-size: 16px; opacity:.92; margin: 0;}
+.score-ring {
+margin: 20px auto 4px; width: 118px; height: 118px; border-radius: 50%;
+background: rgba(255,255,255,.16); border: 2px solid rgba(255,255,255,.55);
+display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.score-ring.num { font-size: 42px; font-weight: 900; line-height: 1; font-family: "Noto Serif SC", serif;}
+.score-ring.lbl { font-size: 12px; letter-spacing:.18em; opacity:.85; margin-top: 5px;}
+.result-body { padding: 24px 22px 26px;}
+.result-body h3 {
+font-size: 16px; margin: 22px 0 10px; display: flex; align-items: center; gap: 8px;
+}
+.result-body h3:first-child { margin-top: 0;}
+.result-body h3::before { content: ""; width: 5px; height: 17px; border-radius: 3px; background: var(--gold); flex: 0 0 auto;}
+.result-body p { line-height: 1.8; font-size: 15px; margin: 0; color: var(--ink);}
+.dim-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 13.5px;}
+.dim-row.d-name { flex: 0 0 64px; font-weight: 700;}
+.dim-track { flex: 1; height: 9px; background: var(--bg-soft); border-radius: 999px; overflow: hidden;}
+.dim-fill { display: block; height: 100%; border-radius: 999px; background: var(--green); width: 0%; transition: width .8s ease; }
+.dim-row.d-val { flex: 0 0 32px; text-align: right; color: var(--ink-soft); font-weight: 700;}
+.path-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px;}
+.path-list li {
+background: var(--bg); border: 1px solid var(--line); border-radius: 13px;
+padding: 12px 14px; font-size: 14.5px; line-height: 1.6; display: flex; gap: 10px;
+}
+.path-list.p-no {
+flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%;
+background: var(--gold-soft); color: var(--gold); font-weight: 900; font-size: 13px;
+display: flex; align-items: center; justify-content: center; margin-top: 1px;
+}
+.warn-box {
+background: var(--gold-soft); border-radius: 13px; padding: 13px 15px;
+font-size: 14px; line-height: 1.7;
+}
+.lucky-box {
+border: 1.5px dashed var(--gold); border-radius: 13px; padding: 13px 15px;
+font-size: 14.5px; line-height: 1.7; text-align: center;
+}
+.lucky-box b { color: var(--gold);}
+/* ---------- 解锁 ---------- */
+.lock-card {
+background: var(--card); border: 1px solid var(--line); border-radius: 24px;
+box-shadow: var(--shadow); padding: 30px 22px 26px; text-align: center;
+}
+.lock-icon {
+width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 50%;
+background: var(--gold-soft); border: 1.5px dashed var(--gold);
+display: flex; align-items: center; justify-content: center; color: var(--gold);
+}
+.lock-card h2 { font-family: "Noto Serif SC", serif; font-size: 24px; margin: 0 0 8px;}
+.lock-card p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; margin: 0 0 18px;}
+.lock-teaser {
+background: var(--bg); border: 1px solid var(--line); border-radius: 15px;
+padding: 16px; margin-bottom: 20px;
+}
+.lock-teaser .t-label { font-size: 12.5px; letter-spacing:.14em; color: var(--ink-soft); font-weight: 700;}
+.lock-teaser .t-name {
+font-family: "Noto Serif SC", serif; font-size: 27px; font-weight: 900; margin-top: 6px;
+filter: blur(9px); user-select: none;
+}
+.lock-form { display: flex; flex-direction: column; gap: 11px;}
+.lock-input {
+width: 100%; padding: 14px 16px; font-size: 17px; font-family: inherit; text-align: center;
+letter-spacing: .12em; font-weight: 700; color: var(--ink);
+background: var(--bg); border: 1.5px solid var(--line); border-radius: 14px; outline: none;
+}
+.lock-input:focus { border-color: var(--gold);}
+.lock-input::placeholder { letter-spacing: 0; font-weight: 400; font-size: 15px; color: var(--ink-soft);}
+.lock-error { color: var(--red); font-size: 13.5px; font-weight: 700; min-height: 20px; margin: 0;}
+.lock-card.shake { animation: shake .4s ease;}
+@keyframes shake { 0%,100% { transform: translateX(0);} 25% { transform: translateX(-7px);} 75% { transform: translateX(7px);}}
+@media (prefers-reduced-motion: reduce) {.lock-card.shake { animation: none;}}
+.lock-buy { font-size: 13px; color: var(--ink-soft); margin-top: 16px; line-height: 1.7;}
+.lock-buy b { color: var(--gold);}
+.btn-unlock-entry {
+background: none; border: none; cursor: pointer; font-family: inherit;
+color: var(--green); font-size: 14px; font-weight: 700; padding: 10px; width: 100%;
+}
+
+/* 结果页内的解锁面板 + 上锁内容 */
+.unlock-panel {
+border: 1.5px dashed var(--gold); border-radius: 16px; background: var(--gold-soft);
+padding: 20px 16px 16px; text-align: center; margin: 18px 0 4px;
+}
+.unlock-panel .lock-icon { width: 52px; height: 52px; margin-bottom: 10px; background: var(--card);}
+.unlock-panel .up-title { justify-content: center; margin: 0 0 6px; font-size: 17px;}
+.unlock-panel .up-title::before { display: none;}
+.unlock-panel .up-desc { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; margin: 0 0 14px;}
+.unlock-panel.shake { animation: shake .4s ease;}
+.locked-blur { filter: blur(7px); user-select: none; pointer-events: none;}
+
+.result-actions { display: flex; flex-direction: column; gap: 11px;}
+.toast {
+position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+background: var(--ink); color: var(--bg); font-size: 14px; font-weight: 700;
+padding: 11px 22px; border-radius: 999px; opacity: 0; pointer-events: none;
+transition: opacity.25s ease, transform.25s ease; z-index: 50; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0);}
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 40;}
+.confetti i {
+position: absolute; top: -14px; width: 9px; height: 14px; border-radius: 2px;
+animation: fall linear forwards;
+}
+@keyframes fall { to { transform: translateY(105vh) rotate(560deg);}}
+@media (prefers-reduced-motion: reduce) {.confetti { display: none;}}
+
+@media (min-width: 640px) {
+.wrap { padding-top: 34px;}
+.q-card { padding: 32px 28px 26px;}
+.result-actions { flex-direction: row;}
+.result-actions.btn { flex: 1;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- 首页 -->
+<section class="screen active" id="screen-home">
+<div class="hero">
+<div class="coin c1">¥</div>
+<div class="coin c2">¥</div>
+<div class="coin c3">¥</div>
+<span class="hero-tag">趣味测试 · 凭直觉选</span>
+<h1>测你的<br /><span class="hl">搞钱天赋</span></h1>
+<p class="sub">有人天生会吆喝，有人闷声发大财，有人躺着就把钱赚了。<br />16 道题，看看你到底是哪种搞钱体质。</p>
+<div class="hero-meta">
+<span><b>16</b> 道题</span>
+<span>约 <b>3 分钟</b></span>
+<span><b>5 种</b>搞钱体质</span>
+</div>
+</div>
+
+<div class="type-preview">
+<h2>你可能是其中一种 ——</h2>
+<div class="type-row">
+<div class="type-badge" style="background:#d64533">狼</div>
+<div><div class="t-name">狼性创业家</div><div class="t-desc">天生老板命，敢赌敢冲</div></div>
+</div>
+<div class="type-row">
+<div class="type-badge" style="background:#e19a12">点</div>
+<div><div class="t-name">创意点子王</div><div class="t-desc">脑洞就是印钞机</div></div>
+</div>
+<div class="type-row">
+<div class="type-badge" style="background:#0e7a4f">稳</div>
+<div><div class="t-name">稳健理财家</div><div class="t-desc">闷声发大财，越攒越有</div></div>
+</div>
+<div class="type-row">
+<div class="type-badge" style="background:#2b6cb0">社</div>
+<div><div class="t-name">社交变现家</div><div class="t-desc">人脉走到哪，钱跟到哪</div></div>
+</div>
+<div class="type-row">
+<div class="type-badge" style="background:#7a5fb5">躺</div>
+<div><div class="t-name">佛系躺赚家</div><div class="t-desc">不爱折腾，但财运不差</div></div>
+</div>
+</div>
+
+<button class="btn btn-primary" id="btn-start">开始测试 →</button>
+<button class="btn-unlock-entry" id="btn-have-code">已购买？先输入解锁码 →</button>
+<p class="fineprint">没有标准答案，选你最真实的反应。<br />答完题先免费看你的搞钱体质，详细解读、搞钱路子和财运签用解锁码打开，码在小红书下单后的自动发货消息里。<br />结果仅供娱乐，开心最重要。</p>
+</section>
+
+<!-- 答题 -->
+<section class="screen" id="screen-quiz">
+<div class="quiz-top">
+<button class="back-btn" id="btn-back" aria-label="上一题">←</button>
+<div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+<div class="q-count"><b id="q-now">1</b> / <span id="q-total">16</span></div>
+</div>
+<div class="q-card">
+<span class="q-scene" id="q-scene"></span>
+<p class="q-text" id="q-text"></p>
+<div class="options" id="options"></div>
+</div>
+<p class="quiz-hint">凭第一直觉选，别想太久 —— 想太久就不准了</p>
+</section>
+
+<!-- 加载 -->
+<section class="screen" id="screen-loading">
+<div class="loading-box">
+<div class="loading-coin">¥</div>
+<h2>正在翻你的财运底牌…</h2>
+<p id="loading-text">数一数你命里藏了几台印钞机</p>
+</div>
+</section>
+
+<!-- 解锁 -->
+<section class="screen" id="screen-lock">
+<div class="lock-card" id="lock-card">
+<div class="lock-icon">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+</div>
+<h2 id="lock-title">输入你的解锁码</h2>
+<p id="lock-desc">解锁码在小红书下单后的自动发货消息里。先在这里解锁，答完题就能直接看完整报告，不用再输一次。</p>
+<div class="lock-form">
+<input class="lock-input" id="lock-input" type="text" placeholder="输入解锁码" autocomplete="off" autocapitalize="characters" spellcheck="false" />
+<p class="lock-error" id="lock-error"></p>
+<button class="btn btn-primary" id="btn-unlock">确认解锁</button>
+<button class="btn btn-ghost" id="btn-lock-home">回首页</button>
+</div>
+<p class="lock-buy">还没买？在小红书下单 <b>0.99 元</b>，解锁码会随自动发货消息发给你，回来填在这里就行。</p>
+</div>
+</section>
+
+<!-- 结果 -->
+<section class="screen" id="screen-result">
+<div class="result-card">
+<div class="result-head" id="result-head">
+<div class="r-tag">你的搞钱体质是</div>
+<h2 id="r-name"></h2>
+<p class="r-sub" id="r-sub"></p>
+<div class="score-ring">
+<div class="num" id="r-score"></div>
+<div class="lbl">搞钱天赋指数</div>
+</div>
+</div>
+<div class="result-body">
+<h3>说说你这个人</h3>
+<div id="wrap-desc"><p id="r-desc"></p></div>
+
+<div class="unlock-panel" id="unlock-panel">
+<div class="lock-icon">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+</div>
+<h3 class="up-title">完整报告已上锁</h3>
+<p class="up-desc">输入购买后收到的解锁码，就能看完整版：详细解读、专属搞钱路子、搞钱盲区和今日财运签。</p>
+<input class="lock-input" id="rp-input" type="text" placeholder="输入解锁码" autocomplete="off" autocapitalize="characters" spellcheck="false" />
+<p class="lock-error" id="rp-error"></p>
+<button class="btn btn-primary" id="btn-rp-unlock">解锁完整报告</button>
+<p class="lock-buy">还没买？在小红书下单 <b>0.99 元</b>，解锁码会随自动发货消息发给你。</p>
+</div>
+
+<h3>五维天赋图</h3>
+<div id="r-dims"></div>
+
+<h3>最适合你的搞钱路子</h3>
+<div id="wrap-paths"><ul class="path-list" id="r-paths"></ul></div>
+
+<h3>你的搞钱盲区</h3>
+<div id="wrap-warn"><div class="warn-box" id="r-warn"></div></div>
+
+<h3>今日财运签</h3>
+<div id="wrap-lucky"><div class="lucky-box" id="r-lucky"></div></div>
+</div>
+</div>
+<div class="result-actions">
+<button class="btn btn-primary" id="btn-copy">复制结果，发给朋友测测</button>
+<button class="btn btn-ghost" id="btn-restart">再测一次</button>
+</div>
+<p class="fineprint">结果仅供娱乐，不构成任何赚钱建议。<br />真搞钱还得靠动手 —— 测完就去干第一件小事吧。</p>
+</section>
+
+</div>
+<div class="toast" id="toast">已复制，去粘贴分享吧</div>
+<div class="confetti" id="confetti"></div>
+
+<script>
+// ============================================================
+// 【解锁码设置】换解锁码只改下面这一行：
+// 把引号里的内容换成新码，同步改掉小红书自动发货消息里的码即可。
+// 大小写不敏感，买家多打空格也没关系。
+var UNLOCK_CODE = "GAOQIAN666";
+// ============================================================
+
+// 每道题：scene 场景标签，q 题干，options 每项 t=体质代码 d=维度代码
+// 维度：act 行动力 / eye 商业嗅觉 / exe 执行力 / pat 耐心值 / soc 社交力
+var QUESTIONS = [
+{
+scene: "场景一 · 周末",
+q: "突然多出一个完全没安排的周末，你最想干什么？",
+options: [
+{ text: "研究一个能赚钱的小项目，说干就干", t: "A", d: "act"},
+{ text: "刷刷同行在卖什么，找找有什么空子可钻", t: "B", d: "eye"},
+{ text: "把账算一算，看看这个月存下了多少", t: "C", d: "pat"},
+{ text: "约朋友吃饭聊天，顺便听听大家最近在忙啥", t: "D", d: "soc"}
+]
+},
+{
+scene: "场景二 · 刷手机",
+q: "刷到“普通人副业月入过万”的帖子，你的第一反应是？",
+options: [
+{ text: "点开细看：他卖什么、怎么卖、我能不能也做", t: "B", d: "eye"},
+{ text: "先收藏，再默默算一下这事靠不靠谱", t: "C", d: "pat"},
+{ text: "转发给朋友：这个你肯定能干，咱俩一起？", t: "D", d: "soc"},
+{ text: "划走。真那么好赚，轮得到发帖告诉我？", t: "E", d: "pat"}
+]
+},
+{
+scene: "场景三 · 闲钱",
+q: "手里突然有 5000 块闲钱，你会怎么处理？",
+options: [
+{ text: "投进自己看好的小生意，钱要流动起来", t: "A", d: "act"},
+{ text: "买课、买工具、买设备，先升级自己", t: "B", d: "exe"},
+{ text: "存起来或买稳健理财，落袋为安", t: "C", d: "pat"},
+{ text: "先放着，等有个不用费劲的机会再说", t: "E", d: "eye"}
+]
+},
+{
+scene: "场景四 · 机会",
+q: "有个机会很赚钱，但要连续忙三个月、没周末，你接吗？",
+options: [
+{ text: "接！赚钱的机会不等人，累完再休息", t: "A", d: "act"},
+{ text: "先算时薪和机会成本，划算就接", t: "C", d: "eye"},
+{ text: "拉个靠谱的人合伙，分工干，没那么累", t: "D", d: "soc"},
+{ text: "不接。钱是赚不完的，命是自己的", t: "E", d: "pat"}
+]
+},
+{
+scene: "场景五 · 开店",
+q: "如果给你一家店随便开，你最想开哪种？",
+options: [
+{ text: "风口上的新店，趁热打铁抢第一波", t: "A", d: "act"},
+{ text: "奇奇怪怪的主题店，靠创意和拍照出圈", t: "B", d: "eye"},
+{ text: "社区小店，客流稳、回头客多那种", t: "C", d: "exe"},
+{ text: "能托管加盟的，别人运营，我收钱就行", t: "E", d: "pat"}
+]
+},
+{
+scene: "场景六 · 消费",
+q: "说实话，你平时的消费习惯更像哪种？",
+options: [
+{ text: "该花就花，花在能生钱的地方从不手软", t: "A", d: "act"},
+{ text: "爱买新奇玩意儿，经常为“有意思”买单", t: "B", d: "eye"},
+{ text: "记账达人，每笔钱去哪儿都清清楚楚", t: "C", d: "exe"},
+{ text: "人情往来舍得花，请客吃饭从不小气", t: "D", d: "soc"}
+]
+},
+{
+scene: "场景七 · 团队",
+q: "在一个小团队里，你通常是哪个角色？",
+options: [
+{ text: "拍板的人：方向我来定，锅我来背", t: "A", d: "act"},
+{ text: "出主意的人：鬼点子最多，负责想新招", t: "B", d: "eye"},
+{ text: "管账的人：预算、进度、风险都盯着", t: "C", d: "exe"},
+{ text: "搞气氛的人：对外联络、拉资源都靠我", t: "D", d: "soc"}
+]
+},
+{
+scene: "场景八 · 亏钱",
+q: "第一次尝试搞钱就亏了 1000 块，你会？",
+options: [
+{ text: "复盘完马上换个打法再试，学费而已", t: "A", d: "act"},
+{ text: "亏都亏了，把踩坑经历写出来，说不定能回本", t: "B", d: "eye"},
+{ text: "心疼好几天，以后只碰自己看得懂的", t: "C", d: "pat"},
+{ text: "算了，我可能就适合安安稳稳的命", t: "E", d: "pat"}
+]
+},
+{
+scene: "场景九 · 风口",
+q: "一个新风口刚冒头，还没几个人在做，你会？",
+options: [
+{ text: "先小成本冲进去试一波，位置比完美重要", t: "A", d: "act"},
+{ text: "先扒清楚它靠什么赚钱、能火多久", t: "B", d: "eye"},
+{ text: "喊上朋友一起干，人多胆子大、资源也多", t: "D", d: "soc"},
+{ text: "再等等，等别人验证过靠谱了再说", t: "E", d: "pat"}
+]
+},
+{
+scene: "场景十 · 学习",
+q: "想学一门能赚钱的技能，你更可能怎么学？",
+options: [
+{ text: "直接上手做项目，边干边学最快", t: "A", d: "exe"},
+{ text: "先找最会玩的人，看看人家是怎么做的", t: "B", d: "eye"},
+{ text: "定个计划表，每天固定学一点，雷打不动", t: "C", d: "exe"},
+{ text: "进个圈子或社群，跟着大家一起学、互相带", t: "D", d: "soc"}
+]
+},
+{
+scene: "场景十一 · 供不应求",
+q: "你卖的东西突然供不应求，订单多到做不完，你第一反应是？",
+options: [
+{ text: "涨价！供不应求的时候不涨等什么时候", t: "A", d: "eye"},
+{ text: "赶紧找人帮忙扩产能，先把量吃下来", t: "A", d: "act"},
+{ text: "限量排队，宁可慢一点，口碑不能崩", t: "C", d: "pat"},
+{ text: "老客户优先，照顾好熟人，生意才能长久", t: "D", d: "soc"}
+]
+},
+{
+scene: "场景十二 · 熬夜",
+q: "为了赶一个能赚钱的项目，要连熬几个大夜，你？",
+options: [
+{ text: "熬！年轻就是资本，干完这票再补觉", t: "A", d: "act"},
+{ text: "白天高效干完，熬夜伤身又低效，不划算", t: "C", d: "exe"},
+{ text: "拉人轮班分工，谁也不用一个人硬扛", t: "D", d: "soc"},
+{ text: "算了，觉睡不好，钱赚再多也不香", t: "E", d: "pat"}
+]
+},
+{
+scene: "场景十三 · 闲置",
+q: "家里堆了一堆闲置物品，你通常怎么处理？",
+options: [
+{ text: "拍照挂二手平台，能回一点是一点", t: "C", d: "exe"},
+{ text: "在朋友圈或群里吆喝一声，熟人价出掉", t: "D", d: "soc"},
+{ text: "研究下哪个平台出价高，挑最划算的卖", t: "B", d: "eye"},
+{ text: "懒得弄，先堆着吧，哪天想起来再说", t: "E", d: "pat"}
+]
+},
+{
+scene: "场景十四 · 稳赚项目",
+q: "朋友拉你投一个号称“稳赚不赔”的项目，你会？",
+options: [
+{ text: "小投一笔试试水，真亏了也不伤筋动骨", t: "A", d: "act"},
+{ text: "先查它到底靠什么赚钱，钱从哪来", t: "B", d: "eye"},
+{ text: "问问身边懂行的人怎么看，再决定", t: "D", d: "soc"},
+{ text: "“稳赚”两个字一出，我就想捂紧钱包", t: "C", d: "pat"}
+]
+},
+{
+scene: "场景十五 · 理想状态",
+q: "你理想中的赚钱状态，最接近哪一句？",
+options: [
+{ text: "睡后收入：睡着了，钱还在进账", t: "E", d: "eye"},
+{ text: "一份时间卖很多次：做一次，长期收钱", t: "B", d: "exe"},
+{ text: "小钱不断、大钱不愁：细水长流最安心", t: "C", d: "pat"},
+{ text: "认识的人越多，机会自己找上门", t: "D", d: "soc"}
+]
+},
+{
+scene: "场景十六 · 态度",
+q: "最后一题：你对“搞钱”这件事，心里最真实的态度是？",
+options: [
+{ text: "人生苦短，必须搞钱，搞钱使我快乐", t: "A", d: "act"},
+{ text: "钱是工具，我想用它换自由和选择权", t: "B", d: "eye"},
+{ text: "慢慢来，钱是攒出来的，也是等出来的", t: "C", d: "pat"},
+{ text: "能躺着赚就别站着，折腾不如命好", t: "E", d: "soc"}
+]
+}
+];
+
+var TYPES = {
+A: {
+name: "狼性创业家", sub: "天生老板命 · 敢赌敢冲",
+color: "#d64533",
+desc: "你身上有股“不等不靠”的劲儿。别人还在群里问“这个能不能做”，你已经把摊子支起来了。你的钱感来自行动：机会窗口就那么几天，你天生知道犹豫是最贵的成本。适合你的从来不是等一个完美时机，而是先上场，在打的过程中把路打通。",
+dims: { act: 95, eye: 78, exe: 84, pat: 46, soc: 66},
+paths: [
+"风口型小生意：看到需求就快速试错，小成本验证，跑通了再放大",
+"把一门手艺或经验做成服务：咨询、代运营、培训，先卖时间再卖产品",
+"盯紧身边的真实需求：同学、同事、邻居缺什么，你就补什么"
+],
+warn: "冲得太快容易踩坑：一时上头的投入、不看账的扩张、把运气当实力。记住，活得久比跑得快更重要，每次下注前先想好最坏能亏多少。",
+lucky: "今日宜：<b>主动出击</b>。那个你犹豫了三天的想法，今天就迈出第一步。"
+},
+B: {
+name: "创意点子王", sub: "脑洞变现家 · 点子就是钱",
+color: "#e19a12",
+desc: "你的脑子是个 24 小时营业的点子铺。别人看到的是日常，你看到的是选题、产品和商机。你最值钱的不是体力，而是“咦，这个可以这样玩”的那一下灵光。只要把点子落地成具体的东西——一个号、一份资料、一个小产品——你的脑洞就是真金白银。",
+dims: { act: 68, eye: 96, exe: 58, pat: 52, soc: 74},
+paths: [
+"内容变现：把你的观察和点子做成图文、视频或小测试，流量起来就有钱",
+"数字小产品：模板、资料包、趣味测试这类做一次卖很多次的东西",
+"给商家出创意：帮小店做活动策划、起名、文案，按单收费"
+],
+warn: "点子太多、落地太少是你的通病：每个都想试，每个都试三天。给你一个狠招——同时只准推进一个点子，跑满 30 天再说换不换。",
+lucky: "今日宜：<b>立刻记下来</b>。刚闪过的那个念头别让它跑了，它可能值钱。"
+},
+C: {
+name: "稳健理财家", sub: "闷声发大财 · 越攒越有底气",
+color: "#0e7a4f",
+desc: "你不吵不闹，但账户余额比谁都稳。别人追风口的时候你在算账，别人冲动消费的时候你在等打折。你的天赋是耐心和纪律：看得懂的才碰，算不清的不要，时间站在你这边。你的钱不是赚来的暴富，是“从不犯大错”攒出来的复利。",
+dims: { act: 52, eye: 72, exe: 86, pat: 97, soc: 48},
+paths: [
+"定投 + 记账的组合拳：把储蓄率提上去，让钱自己生钱",
+"考证、考编、技能溢价这类确定性高的长期投入，越老越吃香",
+"低风险信息差：政策补贴、羊毛规则、闲置变现，稳稳地捡钱"
+],
+warn: "太稳有时会错过：通胀在跑，机会在跑，你的钱不能永远躺着。另外别把“谨慎”过成“不敢开始”，小额试错不丢人。",
+lucky: "今日宜：<b>盘一次账</b>。翻翻这个月的账单，漏掉的钱比赚的还容易找。"
+},
+D: {
+name: "社交变现家", sub: "人脉印钞机 · 走到哪赚到哪",
+color: "#2b6cb0",
+desc: "你的搞钱天赋藏在通讯录里。你天生让人舒服、值得信任，谁有个事儿都先想到你。在这个时代，信任就是最贵的货币：你牵个线、组个局、转个介绍，价值就产生了。你不需要囤货也不用熬夜，你的口碑本身就是门店招牌。",
+dims: { act: 70, eye: 74, exe: 66, pat: 58, soc: 97},
+paths: [
+"撮合与中介：团购群、拼单、二手撮合、本地资源对接，赚信息差和服务费",
+"个人品牌型副业：测评、探店、好物分享，粉丝信你就会买你推荐的",
+"社群运营：把一群有共同需求的人聚起来，社群本身就是资产"
+],
+warn: "人情是资产也是消耗：别为了面子接烂活、做免费劳动力。你的时间要明码标价，好人也要先谈钱再谈感情。",
+lucky: "今日宜：<b>联系一个老朋友</b>。你下一笔钱的线索，大概率在熟人那儿。"
+},
+E: {
+name: "佛系躺赚家", sub: "不爱折腾 · 但财运真不差",
+color: "#7a5fb5",
+desc: "先说清楚：懒，不是你的缺点，是你的筛选器。你天生排斥“很累很麻烦”的赚钱方式，于是被逼着去找省力的路子——自动化的、一次性的、睡后收入的。很多人卷生卷死，你却总能在舒服的位置上接到钱。你的天赋是“会挑”：不下场硬拼，只站在钱路过的地方。",
+dims: { act: 38, eye: 82, exe: 55, pat: 88, soc: 60},
+paths: [
+"做一次、卖很多次的东西：资料包、小工具、模板、测试页，上架后自动发货",
+"平台型被动收入：把闲置物品、空房间、技能挂上平台，让系统替你打工",
+"极简定投：设置好自动扣款，剩下的交给时间，你连看都不用看"
+],
+warn: "躺赚的前提是先“坐起来”一次：再自动的收入，也需要最初那一下搭建。别把“等现成的机会”当借口，你缺的不是天赋，是启动的那 10 分钟。",
+lucky: "今日宜：<b>把一件小事自动化</b>。定投、自动发货、定时发布，设一次，省一年。"
+}
+};
+
+var DIM_NAMES = { act: "行动力", eye: "商业嗅觉", exe: "执行力", pat: "耐心值", soc: "社交力"};
+var KEYS = ["A", "B", "C", "D", "E"];
+
+var state = { idx: 0, answers: []};
+var resultType = null, resultScore = 0, resultDims = null;
+var unlocked = false;      // 本次打开页面内输对过一次码，就不用再输
+
+function $(id) { return document.getElementById(id);}
+function show(id) {
+var screens = document.querySelectorAll(".screen");
+for (var i = 0; i < screens.length; i++) screens[i].classList.remove("active");
+$(id).classList.add("active");
+window.scrollTo({ top: 0, behavior: "smooth"});
+}
+
+function renderQuestion() {
+var q = QUESTIONS[state.idx];
+$("q-scene").textContent = q.scene;
+$("q-text").textContent = q.q;
+$("q-now").textContent = state.idx + 1;
+$("q-total").textContent = QUESTIONS.length;
+$("progress-fill").style.width = (state.idx / QUESTIONS.length * 100) + "%";
+$("btn-back").disabled = state.idx === 0;
+var box = $("options");
+box.innerHTML = "";
+var letters = ["A", "B", "C", "D"];
+q.options.forEach(function (opt, i) {
+var btn = document.createElement("button");
+btn.className = "option";
+btn.innerHTML = '<span class="opt-key">' + letters[i] + '</span><span></span>';
+btn.querySelector("span:last-child").textContent = opt.text;
+btn.addEventListener("click", function () { pick(i, btn);});
+box.appendChild(btn);
+});
+}
+
+function pick(i, btn) {
+var opts = document.querySelectorAll(".option");
+opts.forEach(function (o) { o.disabled = true;});
+btn.classList.add("picked");
+state.answers[state.idx] = QUESTIONS[state.idx].options[i];
+setTimeout(function () {
+state.idx++;
+if (state.idx >= QUESTIONS.length) {
+finish();
+} else {
+renderQuestion();
+}
+}, 260);
+}
+
+function finish() {
+show("screen-loading");
+var lines = ["数一数你命里藏了几台印钞机", "翻一翻你的钱包面相", "对一对五种搞钱体质的账本", "马上就好，财运正在路上"];
+var li = 0;
+var timer = setInterval(function () {
+li = (li + 1) % lines.length;
+$("loading-text").textContent = lines[li];
+}, 550);
+setTimeout(function () {
+clearInterval(timer);
+computeResult();
+applyLockState();
+show("screen-result");
+requestAnimationFrame(function () { animateDims();});
+if (unlocked) confetti();
+}, 2100);
+}
+
+// 半锁：类型名、一句话解读、天赋指数和五维图免费看；
+// 详细解读、搞钱路子、盲区、财运签解锁后才填真实内容，未解锁时只放占位文字并模糊
+function applyLockState() {
+var wraps = ["wrap-desc", "wrap-paths", "wrap-warn", "wrap-lucky"];
+if (unlocked) {
+populateFull();
+wraps.forEach(function (id) { $(id).classList.remove("locked-blur");});
+$("unlock-panel").style.display = "none";
+$("btn-copy").style.display = "";
+} else {
+$("r-desc").textContent = "这段是为你这类体质量身写的详细解读：你的钱感从哪来、适合走什么样的搞钱路线、又最容易在哪一步翻车，解锁后完整展开。";
+var paths = $("r-paths");
+paths.innerHTML = "";
+["为你量身挑的第一条搞钱路子，解锁后看", "第二条路子，结合你的五维天赋定制", "第三条路子，最容易上手的那一条"].forEach(function (p, i) {
+var li = document.createElement("li");
+li.innerHTML = '<span class="p-no">' + (i + 1) + '</span><span></span>';
+li.querySelector("span:last-child").textContent = p;
+paths.appendChild(li);
+});
+$("r-warn").textContent = "你的搞钱盲区就藏在这里，解锁后看完整提醒。";
+$("r-lucky").textContent = "今日财运签已经抽好了，解锁后揭晓。";
+wraps.forEach(function (id) { $(id).classList.add("locked-blur");});
+$("unlock-panel").style.display = "";
+$("btn-copy").style.display = "none";
+$("rp-error").textContent = "";
+$("rp-input").value = "";
+}
+}
+
+function populateFull() {
+$("r-desc").textContent = resultType.desc;
+$("r-warn").textContent = resultType.warn;
+$("r-lucky").innerHTML = resultType.lucky;
+var paths = $("r-paths");
+paths.innerHTML = "";
+resultType.paths.forEach(function (p, i) {
+var li = document.createElement("li");
+li.innerHTML = '<span class="p-no">' + (i + 1) + '</span><span></span>';
+li.querySelector("span:last-child").textContent = p;
+paths.appendChild(li);
+});
+}
+
+function checkCode(raw) {
+var val = String(raw || "").replace(/\s+/g, "").toUpperCase();
+var code = String(UNLOCK_CODE).replace(/\s+/g, "").toUpperCase();
+return !!val && val === code;
+}
+
+function shakeEl(el) {
+el.classList.remove("shake");
+void el.offsetWidth;
+el.classList.add("shake");
+}
+
+// 首页的独立解锁屏：买家先输码，答完题直接看完整报告
+function openPreUnlock() {
+$("lock-error").textContent = "";
+$("lock-input").value = "";
+show("screen-lock");
+}
+
+function tryUnlock() {
+if (checkCode($("lock-input").value)) {
+unlocked = true;
+$("lock-error").textContent = "";
+toast("解锁成功，答完题直接看完整报告");
+show("screen-home");
+} else {
+$("lock-error").textContent = $("lock-input").value.trim() ? "这个码不对，再对一对自动发货消息里的码" : "先把解锁码填进来";
+shakeEl($("lock-card"));
+}
+}
+
+// 结果页内的解锁面板
+function tryUnlockPanel() {
+if (checkCode($("rp-input").value)) {
+unlocked = true;
+applyLockState();
+toast("解锁成功，完整报告打开啦");
+confetti();
+} else {
+$("rp-error").textContent = $("rp-input").value.trim() ? "这个码不对，再对一对自动发货消息里的码" : "先把解锁码填进来";
+shakeEl($("unlock-panel"));
+}
+}
+
+function computeResult() {
+var typeScore = { A: 0, B: 0, C: 0, D: 0, E: 0};
+var dimCount = { act: 0, eye: 0, exe: 0, pat: 0, soc: 0};
+state.answers.forEach(function (a) {
+if (!a) return;
+typeScore[a.t] += 2;
+dimCount[a.d] += 1;
+});
+var best = "A", bestScore = -1;
+KEYS.forEach(function (k) {
+if (typeScore[k] > bestScore) { bestScore = typeScore[k]; best = k;}
+});
+resultType = TYPES[best];
+// 天赋指数：基础分 + 得分占比，落在 66–98 之间（满分题数 = 题目数 × 2）
+resultScore = Math.round(64 + (bestScore / (QUESTIONS.length * 2)) * 34);
+if (resultScore > 98) resultScore = 98;
+// 五维：以体质模板为底，结合实际答题微调
+resultDims = {};
+Object.keys(DIM_NAMES).forEach(function (d) {
+var v = resultType.dims[d] + (dimCount[d] - 3) * 3;
+if (v > 99) v = 99;
+if (v < 22) v = 22;
+resultDims[d] = v;
+});
+
+$("result-head").style.background = "linear-gradient(150deg, " + resultType.color + ", " + resultType.color + "cc)";
+$("r-name").textContent = resultType.name;
+$("r-sub").textContent = resultType.sub;
+$("r-score").textContent = resultScore;
+// 详细解读 / 路子 / 盲区 / 财运签由 applyLockState 按解锁状态填充
+
+var dims = $("r-dims");
+dims.innerHTML = "";
+Object.keys(DIM_NAMES).forEach(function (d) {
+var row = document.createElement("div");
+row.className = "dim-row";
+row.innerHTML =
+'<span class="d-name">' + DIM_NAMES[d] + '</span>' +
+'<span class="dim-track"><span class="dim-fill" data-w="' + resultDims[d] + '"></span></span>' +
+'<span class="d-val">' + resultDims[d] + '</span>';
+dims.appendChild(row);
+});
+}
+
+function animateDims() {
+var fills = document.querySelectorAll(".dim-fill");
+fills.forEach(function (f) { f.style.width = f.getAttribute("data-w") + "%";});
+}
+
+function confetti() {
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+var box = $("confetti");
+var colors = ["#0e7a4f", "#e19a12", "#d64533", "#2b6cb0", "#7a5fb5", "#f0b93e"];
+for (var i = 0; i < 42; i++) {
+var el = document.createElement("i");
+el.style.left = Math.random() * 100 + "%";
+el.style.background = colors[i % colors.length];
+el.style.animationDuration = (1.4 + Math.random() * 1.4) + "s";
+el.style.animationDelay = (Math.random() * 0.5) + "s";
+box.appendChild(el);
+}
+setTimeout(function () { box.innerHTML = "";}, 3600);
+}
+
+var toastTimer = null;
+function toast(msg) {
+var t = $("toast");
+t.textContent = msg;
+t.classList.add("show");
+clearTimeout(toastTimer);
+toastTimer = setTimeout(function () { t.classList.remove("show");}, 2200);
+}
+
+$("btn-start").addEventListener("click", function () {
+state.idx = 0; state.answers = [];
+renderQuestion();
+show("screen-quiz");
+});
+$("btn-have-code").addEventListener("click", openPreUnlock);
+$("btn-unlock").addEventListener("click", tryUnlock);
+$("btn-lock-home").addEventListener("click", function () { show("screen-home");});
+$("lock-input").addEventListener("keydown", function (e) { if (e.key === "Enter") tryUnlock();});
+$("btn-rp-unlock").addEventListener("click", tryUnlockPanel);
+$("rp-input").addEventListener("keydown", function (e) { if (e.key === "Enter") tryUnlockPanel();});
+$("btn-back").addEventListener("click", function () {
+if (state.idx > 0) { state.idx--; renderQuestion();}
+});
+$("btn-restart").addEventListener("click", function () {
+state.idx = 0; state.answers = [];
+show("screen-home");
+});
+$("btn-copy").addEventListener("click", function () {
+var dimText = Object.keys(DIM_NAMES).map(function (d) {
+return DIM_NAMES[d] + " " + resultDims[d];
+}).join(" · ");
+var text =
+"\n" +
+"我的搞钱体质是：" + resultType.name + "（" + resultType.sub + "）\n" +
+"搞钱天赋指数：" + resultScore + " 分\n" +
+dimText + "\n" +
+"最适合我的路子：" + resultType.paths[0] + "\n" +
+"你是哪种搞钱体质？快来测测看！";
+function done() { toast("已复制，去粘贴分享吧");}
+if (navigator.clipboard && navigator.clipboard.writeText) {
+navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done();});
+} else {
+fallbackCopy(text); done();
+}
+});
+function fallbackCopy(text) {
+var ta = document.createElement("textarea");
+ta.value = text;
+ta.style.position = "fixed"; ta.style.opacity = "0";
+document.body.appendChild(ta);
+ta.select();
+try { document.execCommand("copy");} catch (e) {}
+document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
