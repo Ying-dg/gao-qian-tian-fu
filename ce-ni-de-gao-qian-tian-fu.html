@@ -299,6 +299,20 @@ background: var(--bg); border: 1.5px solid var(--line); border-radius: 14px; out
 background: none; border: none; cursor: pointer; font-family: inherit;
 color: var(--green); font-size: 14px; font-weight: 700; padding: 10px; width: 100%;
 }
+.btn-pay {
+background: var(--gold); color: #fff; text-decoration: none; width: 100%;
+box-shadow: 0 10px 22px rgba(225, 154, 18,.34);
+}
+.btn-pay:hover { background: #c9840d;}
+.btn-pay .pay-price { font-size: 20px; font-weight: 900;}
+.pay-or {
+display: flex; align-items: center; gap: 10px;
+color: var(--ink-soft); font-size: 12.5px; font-weight: 700; letter-spacing:.08em;
+margin: 16px 0 12px;
+}
+.pay-or::before, .pay-or::after {
+content: ""; flex: 1; height: 1px; background: var(--line);
+}
 
 /* 结果页内的解锁面板 + 上锁内容 */
 .unlock-panel {
@@ -380,8 +394,8 @@ animation: fall linear forwards;
 </div>
 
 <button class="btn btn-primary" id="btn-start">开始测试 →</button>
-<button class="btn-unlock-entry" id="btn-have-code">已购买？先输入解锁码 →</button>
-<p class="fineprint">没有标准答案，选你最真实的反应。<br />答完题先免费看你的搞钱体质，详细解读、搞钱路子和财运签用解锁码打开，码在小红书下单后的自动发货消息里。<br />结果仅供娱乐，开心最重要。</p>
+<button class="btn-unlock-entry" id="btn-have-code">已付款？先输入卡密 →</button>
+<p class="fineprint">没有标准答案，选你最真实的反应。<br />答完题先免费看你的搞钱体质，详细解读、搞钱路子和财运签花 0.99 元解锁，付款后拿到的卡密就能打开。<br />结果仅供娱乐，开心最重要。</p>
 </section>
 
 <!-- 答题 -->
@@ -414,15 +428,16 @@ animation: fall linear forwards;
 <div class="lock-icon">
 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
 </div>
-<h2 id="lock-title">输入你的解锁码</h2>
-<p id="lock-desc">解锁码在小红书下单后的自动发货消息里。先在这里解锁，答完题就能直接看完整报告，不用再输一次。</p>
+<h2 id="lock-title">解锁完整报告</h2>
+<p id="lock-desc">花 0.99 元付款，拿到卡密后填在下面。先在这里解锁，答完题就能直接看完整报告，不用再输一次。</p>
+<a class="btn btn-pay pay-link" href="#" target="_blank" rel="noopener">花 <span class="pay-price">0.99 元</span> 解锁</a>
+<div class="pay-or">已付款？输入卡密</div>
 <div class="lock-form">
-<input class="lock-input" id="lock-input" type="text" placeholder="输入解锁码" autocomplete="off" autocapitalize="characters" spellcheck="false" />
+<input class="lock-input" id="lock-input" type="text" placeholder="输入卡密" autocomplete="off" autocapitalize="characters" spellcheck="false" />
 <p class="lock-error" id="lock-error"></p>
 <button class="btn btn-primary" id="btn-unlock">确认解锁</button>
 <button class="btn btn-ghost" id="btn-lock-home">回首页</button>
 </div>
-<p class="lock-buy">还没买？在小红书下单 <b>0.99 元</b>，解锁码会随自动发货消息发给你，回来填在这里就行。</p>
 </div>
 </section>
 
@@ -447,11 +462,12 @@ animation: fall linear forwards;
 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
 </div>
 <h3 class="up-title">完整报告已上锁</h3>
-<p class="up-desc">输入购买后收到的解锁码，就能看完整版：详细解读、专属搞钱路子、搞钱盲区和今日财运签。</p>
-<input class="lock-input" id="rp-input" type="text" placeholder="输入解锁码" autocomplete="off" autocapitalize="characters" spellcheck="false" />
+<p class="up-desc">花 0.99 元解锁完整版：详细解读、专属搞钱路子、搞钱盲区和今日财运签。付款后会拿到卡密，填在下面就能打开。</p>
+<a class="btn btn-pay pay-link" href="#" target="_blank" rel="noopener">花 <span class="pay-price">0.99 元</span> 解锁</a>
+<div class="pay-or">已付款？输入卡密</div>
+<input class="lock-input" id="rp-input" type="text" placeholder="输入卡密" autocomplete="off" autocapitalize="characters" spellcheck="false" />
 <p class="lock-error" id="rp-error"></p>
 <button class="btn btn-primary" id="btn-rp-unlock">解锁完整报告</button>
-<p class="lock-buy">还没买？在小红书下单 <b>0.99 元</b>，解锁码会随自动发货消息发给你。</p>
 </div>
 
 <h3>五维天赋图</h3>
@@ -480,8 +496,13 @@ animation: fall linear forwards;
 
 <script>
 // ============================================================
+// 【付款链接】换付款链接只改下面这一行：
+// 把引号里的地址换成真正的商品付款链接，页面上所有
+// “花 0.99 元解锁”按钮都会跳到这个地址。
+var PAY_LINK = "https://www.xiaohongshu.com/user/profile/68749f26000000001b01b007";
+// ============================================================
 // 【解锁码设置】换解锁码只改下面这一行：
-// 把引号里的内容换成新码，同步改掉小红书自动发货消息里的码即可。
+// 把引号里的内容换成新码，同步改掉自动发货消息里的码即可。
 // 大小写不敏感，买家多打空格也没关系。
 var UNLOCK_CODE = "GAOQIAN666";
 // ============================================================
@@ -857,7 +878,7 @@ $("lock-error").textContent = "";
 toast("解锁成功，答完题直接看完整报告");
 show("screen-home");
 } else {
-$("lock-error").textContent = $("lock-input").value.trim() ? "这个码不对，再对一对自动发货消息里的码" : "先把解锁码填进来";
+$("lock-error").textContent = $("lock-input").value.trim() ? "这个卡密不对，再对一对付款后收到的卡密" : "先把卡密填进来";
 shakeEl($("lock-card"));
 }
 }
@@ -870,7 +891,7 @@ applyLockState();
 toast("解锁成功，完整报告打开啦");
 confetti();
 } else {
-$("rp-error").textContent = $("rp-input").value.trim() ? "这个码不对，再对一对自动发货消息里的码" : "先把解锁码填进来";
+$("rp-error").textContent = $("rp-input").value.trim() ? "这个卡密不对，再对一对付款后收到的卡密" : "先把卡密填进来";
 shakeEl($("unlock-panel"));
 }
 }
@@ -947,6 +968,10 @@ t.classList.add("show");
 clearTimeout(toastTimer);
 toastTimer = setTimeout(function () { t.classList.remove("show");}, 2200);
 }
+
+// 所有“花 0.99 元解锁”按钮都跳到顶部设置的付款链接
+var payLinks = document.querySelectorAll(".pay-link");
+payLinks.forEach(function (a) { a.href = PAY_LINK;});
 
 $("btn-start").addEventListener("click", function () {
 state.idx = 0; state.answers = [];
